@@ -5,16 +5,14 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 无聊的话
+ * 心灵鸡汤
  *
- * @TableName point_boring_talk
+ * @TableName point_soulful_sanctuary
  */
 @Data
-public class PointBoringTalk implements Serializable {
-
+public class PointSoulfulSanctuary implements Serializable {
     /**
      * 内容
      */
     private String value;
-
 }

@@ -5,8 +5,10 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.point.apisdk.common.BaseResponse;
 import com.point.apisdk.model.entity.PointBoringTalk;
+import com.point.apisdk.model.entity.PointPoem;
+import com.point.apisdk.model.entity.PointSoulfulSanctuary;
+import com.point.apisdk.model.entity.PointUser;
 import com.point.apisdk.utils.SignUtils;
-
 
 import static com.point.apisdk.utils.CheckUtils.CheckResponse;
 
@@ -16,7 +18,8 @@ import static com.point.apisdk.utils.CheckUtils.CheckResponse;
  */
 public class PointApiClient {
 
-    private static final String GATEWAY_PATH = "http://localhost:8090";
+    //private static final String GATEWAY_PATH = "http://localhost:8090";
+    private static final String GATEWAY_PATH = "http://124.71.42.27:8090";
 
     private String accessKey;
 
@@ -39,6 +42,51 @@ public class PointApiClient {
 
         PointBoringTalk pointBoringTalk = JSONUtil.toBean(JSONUtil.toJsonStr(baseResponse.getData()), PointBoringTalk.class);
 
-        return pointBoringTalk.getContent();
+        return pointBoringTalk.getValue();
+    }
+
+    public String getRandomSoulfulSanctuary() {
+        // 将用于请求的对象装换为json
+        String json = JSONUtil.toJsonStr("");
+
+        HttpResponse httpResponse = HttpRequest.post(GATEWAY_PATH + "/api/soulfulsanctuary/random")
+                .addHeaders(SignUtils.GetHeaderMap(json, accessKey, secretKey))
+                .body(json)
+                .execute();
+        BaseResponse baseResponse = CheckResponse(httpResponse);
+
+        PointSoulfulSanctuary pointSoulfulSanctuary = JSONUtil.toBean(JSONUtil.toJsonStr(baseResponse.getData()), PointSoulfulSanctuary.class);
+
+        return pointSoulfulSanctuary.getValue();
+    }
+
+    public String getRandomPoem() {
+        // 将用于请求的对象装换为json
+        String json = JSONUtil.toJsonStr("");
+
+        HttpResponse httpResponse = HttpRequest.post(GATEWAY_PATH + "/api/poem/random")
+                .addHeaders(SignUtils.GetHeaderMap(json, accessKey, secretKey))
+                .body(json)
+                .execute();
+        BaseResponse baseResponse = CheckResponse(httpResponse);
+
+        PointPoem pointPoem = JSONUtil.toBean(JSONUtil.toJsonStr(baseResponse.getData()), PointPoem.class);
+
+        return pointPoem.getValue();
+    }
+
+    public String getUserName(String userRequestParams) {
+        // 将用于请求的对象装换为json
+        String json = userRequestParams;
+
+        HttpResponse httpResponse = HttpRequest.post(GATEWAY_PATH + "/api/test/user")
+                .addHeaders(SignUtils.GetHeaderMap(json, accessKey, secretKey))
+                .body(json)
+                .execute();
+        BaseResponse baseResponse = CheckResponse(httpResponse);
+
+        PointUser pointUser = JSONUtil.toBean(JSONUtil.toJsonStr(baseResponse.getData()), PointUser.class);
+
+        return pointUser.getName();
     }
 }
